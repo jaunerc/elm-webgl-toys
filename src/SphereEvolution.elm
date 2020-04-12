@@ -1,7 +1,6 @@
 module SphereEvolution exposing (..)
 
 import Browser
-import Debug
 import Browser.Events as E
 import Html exposing (Html)
 import Html.Attributes exposing (width, height, style)
@@ -50,9 +49,15 @@ update msg model =
   case msg of
     TimeDelta dt ->
       ( { model | angle = model.angle + dt / 5000
-      , clock = Debug.log "dt " (model.clock + dt) }
+      , clock = updateOrResetClock model.clock dt }
       , Cmd.none )
 
+updateOrResetClock : Clock -> Float -> Clock
+updateOrResetClock currTime dt =
+    if currTime > 12 * second then
+        0
+    else
+        currTime + dt
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
